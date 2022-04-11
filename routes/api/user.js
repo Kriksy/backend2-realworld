@@ -20,32 +20,33 @@ route.get("/", (req, res) => {
     })
 })
 
-route.get("/users", (req, res) => {    
-    res.send({
-        "user": {
-            "email": "panos@panos.panos",
-            // "email": req.body.user.email,
-            "username": "panos",
-            // "username": req.body.user.username,
-            "token": "jwt.token.here",
-            "bio": "I am Panos",
-            "image": "image",
-        }
-    })
-})
+// NO NEED FOR THIS
+// route.get("/users", (req, res) => {    
+//     res.send({
+//         "user": {
+//             "email": "panos@panos.panos",
+//             // "email": req.body.user.email,
+//             "username": "panos",
+//             // "username": req.body.user.username,
+//             "token": "jwt.token.here",
+//             "bio": "I am Panos",
+//             "image": "image",
+//         }
+//     })
+// })
 
 
 // UPDATE USER -  PUT http://localhost:3000/user 
 route.put('/', async (req, res) => {
 
     // const id = req.body.user._id;
-    console.log("req.body");
-    console.log(req.body);
+    // console.log("req.body");
+    // console.log(req.body);
     const email = req.body.user.email;
 
     const user = await User.findOne({email});
-    console.log("user:");
-    console.log(user);
+    // console.log("user:");
+    // console.log(user);
    
     // User.findById(req.payload.user.id).then( async function(user){
         // User.findById(req.payload.user.id).then( async function(user){

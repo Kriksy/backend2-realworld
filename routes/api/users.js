@@ -23,16 +23,16 @@ const JWT_SECRET = token.SECRET
 //     })
 // })
 
-// CURRENT USER - Fake response - it works
-route.get("/", (req, res) => {
-    res.send({
-        "user": {
-            "username": req.body.user.username,
-            "email": req.body.user.email,
-            "password": req.body.user.password,
-        }
-    })
-})
+// CURRENT USER - Fake response - it works -- NO NEED FOR THIS
+// route.get("/", (req, res) => {
+//     res.send({
+//         "user": {
+//             "username": req.body.user.username,
+//             "email": req.body.user.email,
+//             "password": req.body.user.password,
+//         }
+//     })
+// })
 
 
 // -----POST-----
@@ -73,8 +73,8 @@ route.post("/", async (req, res) => {
 
 // REGISTER USER - 2nd ATTEMPT (5/4/21)
 route.post("/", async (req, res) => {
-    console.log("register:")
-    console.log(req.body)
+    // console.log("register:")
+    // console.log(req.body)
     var user = new User(req.body)
 
     user.username = req.body.user.username;
@@ -83,8 +83,8 @@ route.post("/", async (req, res) => {
     // sätter token till en tom sträng (för testen krever det)
     user.token = ""
 
-    console.log("user:")
-    console.log(user)
+    // console.log("user:")
+    // console.log(user)
 
     await user.save();
     res.send({ user });
@@ -107,7 +107,7 @@ route.post('/login', async (req, res) => {
     const password = req.body.user.password;
 
     const loggedInUser = await User.findOne({ email });
-    console.log(loggedInUser)
+    // console.log(loggedInUser)
 
     if (!req.body.user.email) {
         return res.status(422).json({ errors: { email: "can't be blank" } });
@@ -123,7 +123,7 @@ route.post('/login', async (req, res) => {
         });
         return;
     }
-    console.log(req.body)
+    // console.log(req.body)
 
     // Använder JWT sign för att skapa en token
     const token = jwt.sign(
@@ -150,7 +150,7 @@ route.post('/login', async (req, res) => {
         token: token,
     }
     res.json({ user: user });
-    console.log(user)
+    // console.log(user)
     // res.json({
     //     message: "Login succesfull",
     // });

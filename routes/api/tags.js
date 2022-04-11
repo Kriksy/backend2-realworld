@@ -24,17 +24,17 @@ route.get("/", async (req, res, then) => {
         // console.log(uniqueAges);
     
 
-    console.log("AA FIOREDS:")
+    
     let allTagsArray = [];
     for(let i = 0; i < allArticles.length; i++){
 
         allArticles[i].tagList?.forEach(tag => {
-            console.log(tag)
+            // console.log(tag)
             allTagsArray.push(tag)
         })
     }
-    console.log("allTagsArray:")
-    console.log(allTagsArray);
+    // console.log("allTagsArray:")
+    // console.log(allTagsArray);
 
     tags = [allTagsArray] 
     // console.log("tags:")
