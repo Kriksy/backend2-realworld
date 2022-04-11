@@ -50,7 +50,7 @@ app.use((req, _res, next) => {
 
 
 // ROUTES
-app.use("/", require("./routes/api"));
+app.use("/api", require("./routes/api"));
 
 app.listen(PORT, () => {
   console.log(`Started Express server on port ${PORT}`);
