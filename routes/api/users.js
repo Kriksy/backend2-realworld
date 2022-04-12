@@ -112,9 +112,8 @@ route.post('/login', async (req, res) => {
     const loggedInUser = await User.findOne({ email });
     // console.log(loggedInUser)
 
-
     if (loggedInUser == null) {
-        return res.status(422).json({ errors: { email: "Email does not exist" } })
+        return res.status(422).json({ errors: { email: " does not exist" } })
     }
 
     if (!req.body.user.email) {
@@ -127,11 +126,13 @@ route.post('/login', async (req, res) => {
     if (loggedInUser.password !== password || loggedInUser.email !== email) {
         res.status(403);
         res.json({
-            message: "Invalid login",
+            errors: {
+                password: "is not correct",
+            }
         });
         return;
     }
-    // console.log(req.body)
+    // // console.log(req.body)
 
     // Använder JWT sign för att skapa en token
     const token = jwt.sign(
