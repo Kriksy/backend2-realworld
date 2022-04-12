@@ -5,6 +5,7 @@ const { requireLogin } = require("../../token");
 
 // GET CURRENT USER
 route.get("/", requireLogin, async (req, res) => {  
+    
     const id = req.user.user_id; //taken from req.user which includes the token's data
     const user = await User.findById(id)  
     
@@ -21,11 +22,17 @@ route.get("/", requireLogin, async (req, res) => {
 
 
 // UPDATE USER
-route.put('/', async (req, res) => {
+route.put('/', requireLogin, async (req, res) => {
 
-    const email = req.body.user.email;
 
-    const user = await User.findOne({email});
+    console.log("PUT user.js: req.user:")
+    console.log(req.user)
+
+    const id = req.user.user_id;
+
+    const email = req.user.email;
+
+    const user = await User.findById(id);
    
     // User.findById(req.payload.user.id).then( async function(user){
         // User.findById(req.payload.user.id).then( async function(user){
