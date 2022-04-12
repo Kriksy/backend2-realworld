@@ -11,7 +11,8 @@ route.use("/comments", require("./comments"));
 // Get ALL articles
 route.get("/", async (req, res) => {
 
-    var articles = await Article.find();
+    // https://stackoverflow.com/questions/4299991/how-to-sort-in-mongoose
+    var articles = await Article.find({}, null, { sort: { tagList: "descending" } }) // descending, desc: descend stiga ned (motsatsen av alfabetsordning 🤯 )
 
     articlesCount = articles.length;
 
@@ -19,7 +20,9 @@ route.get("/", async (req, res) => {
     articles = { articles }, articles.articlesCount = articlesCount;
 
     res.send(articles)
+
 })
+
 
 
 // Get a single article
@@ -69,39 +72,39 @@ route.put("/:article", async (req, res) => {
 
 
 // FAVORITE ARTICLE
-route.post("/:article/favorite", async (req,res) => {
+route.post("/:article/favorite", async (req, res) => {
 
     var article = await Article.findOne({});
-    
-    // For testing purposes
-        // var articleId = "62514a9182197faaa9d4b03a"; 
-        // await Article.findByIdAndUpdate({_id: articleId}, {favorited: true})
-        // await Article.findByIdAndUpdate({_id: articleId}, {$inc : {favoritesCount: 1}});
 
-    await Article.findByIdAndUpdate({_id: article._id}, {favorited: true})
-    await Article.findByIdAndUpdate({_id: article._id}, {$inc : {favoritesCount: 1}});
-    article = await Article.findById({_id: article._id});
-    
-    res.send({article});
+    // For testing purposes
+    // var articleId = "62514a9182197faaa9d4b03a"; 
+    // await Article.findByIdAndUpdate({_id: articleId}, {favorited: true})
+    // await Article.findByIdAndUpdate({_id: articleId}, {$inc : {favoritesCount: 1}});
+
+    await Article.findByIdAndUpdate({ _id: article._id }, { favorited: true })
+    await Article.findByIdAndUpdate({ _id: article._id }, { $inc: { favoritesCount: 1 } });
+    article = await Article.findById({ _id: article._id });
+
+    res.send({ article });
     // console.log("from FAVORITE ARTICLE POST: article")
     // console.log(article)
     // console.log("Favorite article POST END:");
 })
 
 // UNFAVORITE ARTICLE
-route.delete("/:article/favorite", async (req,res) => {
+route.delete("/:article/favorite", async (req, res) => {
 
     var article = await Article.findOne({});
 
     // For testing purposes
-        // var articleId = "62514a9182197faaa9d4b03a"; 
-        // await Article.findByIdAndUpdate({_id: articleId}, {favorited: false})
-        // await Article.findByIdAndUpdate({_id: articleId}, {$inc : {favoritesCount: -1}});
+    // var articleId = "62514a9182197faaa9d4b03a"; 
+    // await Article.findByIdAndUpdate({_id: articleId}, {favorited: false})
+    // await Article.findByIdAndUpdate({_id: articleId}, {$inc : {favoritesCount: -1}});
 
-    await Article.findByIdAndUpdate({_id: article._id}, {favorited: false})
-    await Article.findByIdAndUpdate({_id: article._id}, {$inc : {favoritesCount: -1}});
-    article = await Article.findById({_id: article._id});
-    res.send({article});
+    await Article.findByIdAndUpdate({ _id: article._id }, { favorited: false })
+    await Article.findByIdAndUpdate({ _id: article._id }, { $inc: { favoritesCount: -1 } });
+    article = await Article.findById({ _id: article._id });
+    res.send({ article });
 })
 
 
