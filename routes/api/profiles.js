@@ -14,7 +14,7 @@ route.get("/:username", requireLogin, async (req, res) => {
 
     res.send({
         "profile": {
-            "username": req.user.username,
+            "username": user.username,
             "bio": user.bio,
             "image": user.image,
             // "following": false
