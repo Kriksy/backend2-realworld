@@ -1,52 +1,31 @@
 const { Router } = require("express");
-
 const route = Router();
-
 const { User } = require("../../models/userSchema");
+const { requireLogin } = require("../../token");
 
-// GET CURRENT USER - Fake response - it works (but in route http://localhost:3000/api/user/ NOT http://localhost:3000/user/)
-
-route.get("/", (req, res) => {    
+// GET CURRENT USER
+route.get("/", requireLogin, async (req, res) => {  
+    const id = req.user.user_id; //taken from req.user which includes the token's data
+    const user = await User.findById(id)  
+    
     res.send({
         "user": {
-            "email": "panos@panos.panos",
-            // "email": req.body.user.email,
-            "username": "panos",
-            // "username": req.body.user.username,
-            "token": "jwt.token.here",
-            "bio": "I am Panos",
-            "image": "image",
+            "email": user.email,
+            "username": user.username,
+            "token": user.token,
+            "bio": user.bio,
+            "image": user.image,
         }
     })
 })
 
-// NO NEED FOR THIS
-// route.get("/users", (req, res) => {    
-//     res.send({
-//         "user": {
-//             "email": "panos@panos.panos",
-//             // "email": req.body.user.email,
-//             "username": "panos",
-//             // "username": req.body.user.username,
-//             "token": "jwt.token.here",
-//             "bio": "I am Panos",
-//             "image": "image",
-//         }
-//     })
-// })
 
-
-// UPDATE USER -  PUT http://localhost:3000/user 
+// UPDATE USER
 route.put('/', async (req, res) => {
 
-    // const id = req.body.user._id;
-    // console.log("req.body");
-    // console.log(req.body);
     const email = req.body.user.email;
 
     const user = await User.findOne({email});
-    // console.log("user:");
-    // console.log(user);
    
     // User.findById(req.payload.user.id).then( async function(user){
         // User.findById(req.payload.user.id).then( async function(user){
@@ -72,17 +51,10 @@ route.put('/', async (req, res) => {
           user.password = req.body.user.password;
         }
     
-    //     await user.save();
-    //     res.send(user);
-    // })
     return user.save().then(function(){
         return res.json({user: user.toJSON()});
       });
-    // })
 
   });
   
-
-
-
 module.exports = route;

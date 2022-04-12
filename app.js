@@ -34,17 +34,17 @@ app.get("/", (_req, res) => {
 // -- JWT Token Check
 app.use((req, _res, next) => {
   const authHeader = req.header("Authorization");
-  console.log("req.header:", req.header)
-  console.log("authHeader: ", authHeader)
+  // console.log("req.header:", req.header)
+  // console.log("authHeader: ", authHeader)
   if (authHeader) {
     const token = authHeader.split(" ")[1];
-    console.log("Token:", token);
+    // console.log("Token:", token);
     if (token) {
       req.user = jwt.verify(token, JWT_SECRET);
     }
 
   }
-  console.log("User: ", req.user)
+  // console.log("User: ", req.user)
   next();
 });
 

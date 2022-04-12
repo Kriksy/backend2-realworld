@@ -80,6 +80,9 @@ route.post("/", async (req, res) => {
     user.username = req.body.user.username;
     user.email = req.body.user.email;
     user.password = req.body.user.password;
+    // user.bio = req.body.user.bio;
+    // user.image = req.body.user.image;
+    
     // sätter token till en tom sträng (för testen krever det)
     user.token = ""
 

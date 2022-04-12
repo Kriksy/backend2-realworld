@@ -48,7 +48,7 @@ route.post("/", requireLogin, async (req, res) => {
 
     await article.save();
     res.send({ article });
-    console.log("Create an article:")
+    // console.log("Create an article:")
 })
 
 
@@ -56,7 +56,7 @@ route.post("/", requireLogin, async (req, res) => {
 route.put("/:article", async (req, res) => {
 
     let slug = req.params.article
-    console.log("slug:", slug)
+    // console.log("slug:", slug)
 
     // https://mongoosejs.com/docs/tutorials/findoneandupdate.html
     const filter = { slug };
@@ -83,9 +83,9 @@ route.post("/:article/favorite", async (req,res) => {
     article = await Article.findById({_id: article._id});
     
     res.send({article});
-    console.log("from FAVORITE ARTICLE POST: article")
-    console.log(article)
-    console.log("Favorite article POST END:");
+    // console.log("from FAVORITE ARTICLE POST: article")
+    // console.log(article)
+    // console.log("Favorite article POST END:");
 })
 
 // UNFAVORITE ARTICLE
