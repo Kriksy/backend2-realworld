@@ -4,20 +4,20 @@ const { User } = require("../../models/userSchema");
 const { requireLogin } = require("../../token");
 
 // GET CURRENT USER
-route.get("/", requireLogin, async (req, res) => {  
-    
-    const id = req.user.user_id; //taken from req.user which includes the token's data
-    const user = await User.findById(id)  
-    
-    res.send({
-        "user": {
-            "email": user.email,
-            "username": user.username,
-            "token": user.token,
-            "bio": user.bio,
-            "image": user.image,
-        }
-    })
+route.get("/", requireLogin, async (req, res) => {
+
+  const id = req.user.user_id; //taken from req.user which includes the token's data
+  const user = await User.findById(id)
+
+  res.send({
+    "user": {
+      "email": user.email,
+      "username": user.username,
+      "token": user.token,
+      "bio": user.bio,
+      "image": user.image,
+    }
+  })
 })
 
 
@@ -25,43 +25,48 @@ route.get("/", requireLogin, async (req, res) => {
 route.put('/', requireLogin, async (req, res) => {
 
 
-    console.log("PUT user.js: req.user:")
-    console.log(req.user)
+  console.log("PUT user.js: req.user:")
+  console.log(req.user)
 
-    const id = req.user.user_id;
+  const id = req.user.user_id;
 
-    const email = req.user.email;
+  const email = req.user.email;
 
-    const user = await User.findById(id);
-   
-    // User.findById(req.payload.user.id).then( async function(user){
-        // User.findById(req.payload.user.id).then( async function(user){
-        if(!user){ return res.sendStatus(401); }
-    
-        // only update fields that were actually passed...
-        if(typeof req.body.user.username !== 'undefined'){
-          user.username = req.body.user.username;
-        }
-        if(typeof req.body.user.email !== 'undefined'){
-          user.email = req.body.user.email;
-        }
-        if(typeof req.body.user.bio !== 'undefined'){
-          user.bio = req.body.user.bio;
-        }
-        if(typeof req.body.user.image !== 'undefined'){
-          user.image = req.body.user.image;
-        }
-        if(typeof req.body.user.token !== 'undefined'){
-            user.token = req.body.user.token;
-          }
-        if(typeof req.body.user.password !== 'undefined'){
-          user.password = req.body.user.password;
-        }
-    
-    return user.save().then(function(){
-        return res.json({user: user.toJSON()});
-      });
+  const user = await User.findById(id);
 
+  // User.findById(req.payload.user.id).then( async function(user){
+  // User.findById(req.payload.user.id).then( async function(user){
+  if (!user) { return res.sendStatus(401); }
+
+  // only update fields that were actually passed...
+  if (typeof req.body.user.username !== 'undefined') {
+    user.username = req.body.user.username;
+  }
+  if (typeof req.body.user.email !== 'undefined') {
+    user.email = req.body.user.email;
+  }
+  if (typeof req.body.user.bio !== 'undefined') {
+    user.bio = req.body.user.bio;
+  }
+  if (typeof req.body.user.image !== 'undefined') {
+    user.image = req.body.user.image;
+  }
+  if (typeof req.body.user.token !== 'undefined') {
+    user.token = req.body.user.token;
+  }
+  // if (typeof req.body.user.password !== 'undefined') {
+  //   user.password = req.body.user.password;
+  // }
+
+  if (req.body.user.password) {  // det är kanske bättre att använda det.
+
+  }
+
+  console.log("#########", user)
+  return user.save().then(function () {
+    return res.json({ user: user.toJSON() });
   });
-  
+
+});
+
 module.exports = route;
