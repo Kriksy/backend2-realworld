@@ -82,7 +82,7 @@ route.post("/", async (req, res) => {
     user.password = req.body.user.password;
     // user.bio = req.body.user.bio;
     // user.image = req.body.user.image;
-    
+
     // sätter token till en tom sträng (för testen krever det)
     user.token = ""
 
@@ -111,6 +111,11 @@ route.post('/login', async (req, res) => {
 
     const loggedInUser = await User.findOne({ email });
     // console.log(loggedInUser)
+
+
+    if (loggedInUser == null) {
+        return res.status(422).json({ errors: { email: "Email does not exist" } })
+    }
 
     if (!req.body.user.email) {
         return res.status(422).json({ errors: { email: "can't be blank" } });
