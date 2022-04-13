@@ -6,8 +6,6 @@ var { Article } = require("../../models/articleSchema");
 const route = Router();
 
 route.get("/", async (req, res, then) => {
-    // console.log("Tags req:");
-    // console.log(req.body)
 
     var allArticles = await Article.find({}, { _id: 0, tagList: 1 });
     // console.log("allArticles:");
