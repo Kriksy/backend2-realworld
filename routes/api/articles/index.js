@@ -10,10 +10,34 @@ route.use("/comments", require("./comments"));
 
 // Get ALL articles
 route.get("/", async (req, res) => {
+    const query = {}; //initialize query as an empty object
+    console.log("req.query")
+    console.log(req.query)
+    // If req.query.author includes a value (it's not undefined), set author value in empty "query" object to req.query.author.
+
+    //GET Articles by Author
+    if (req.query.author) {
+        // query.author = req.query.author;
+        
+        const user = await User.findOne({username: req.query.author});
+        if(user) {
+            query.author = user._id;
+        }
+        else {
+            query.author = null;
+        }
+    }
+
+    //GET Articles by Tag
+    if(req.query.tag){
+        query.tagList = req.query.tag;
+    }
+    
 
     // https://stackoverflow.com/questions/4299991/how-to-sort-in-mongoose
-    var articles = await Article.find({}, null, { sort: { tagList: "descending" } }) // descending, desc: descend stiga ned (motsatsen av alfabetsordning 🤯 )
-
+    var articles = await Article.find(query, null, { sort: { tagList: "descending" } }) // descending, desc: descend stiga ned (motsatsen av alfabetsordning 🤯 )
+    
+    console.log("hey:", query)
     articlesCount = articles.length;
 
     // Add articlesCount field and value to articles
@@ -31,6 +55,21 @@ route.get("/:slug", async (req, res) => {
     var article = await Article.findOne({ slug: req.params.slug });
     res.send({ article })
 })
+
+
+// Get an Author's Articles
+// route.get(`/`, requireLogin, async (req, res) => {
+    
+//     console.log("req.query:")
+//     console.log(req.query)
+    
+//     console.log("req.body:")
+//     console.log(req.body)
+    
+
+//     var article = await Article.findOne({ slug: req.params.slug });
+//     res.send({ article })
+// })
 
 
 // CREATE AN ARTICLE
