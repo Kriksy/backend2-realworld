@@ -1,6 +1,9 @@
 const express = require("express");
+const dotenv = require("dotenv");
+dotenv.config();
+
 const app = express()
-const PORT = 3000;
+const PORT = process.env.PORT;
 const path = require("path");
 
 const jwt = require("jsonwebtoken");
@@ -12,7 +15,7 @@ const JWT_SECRET = token.SECRET
 
 // Connection to MongoDB Atlas
 const mongoose = require("mongoose");
-mongoose.connect("mongodb+srv://panos:123@realworld-gruppuppgift.qxob6.mongodb.net/realworld-gruppuppgift?retryWrites=true&w=majority")
+mongoose.connect(process.env.MONGODB_URL)
   .then(() => {
     console.log("Connection to MongoDB successful");
   })
