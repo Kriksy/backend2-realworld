@@ -25,8 +25,8 @@ route.get("/", requireLogin, async (req, res) => {
 route.put('/', requireLogin, async (req, res) => {
 
 
-  console.log("PUT user.js: req.user:")
-  console.log(req.user)
+  // console.log("PUT user.js: req.user:")
+  // console.log(req.user)
 
   const id = req.user.user_id;
 
@@ -62,7 +62,7 @@ route.put('/', requireLogin, async (req, res) => {
 
   }
 
-  console.log("#########", user)
+  // console.log("#########", user)
   return user.save().then(function () {
     return res.json({ user: user.toJSON() });
   });
