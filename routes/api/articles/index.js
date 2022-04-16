@@ -210,5 +210,12 @@ route.delete("/:article/favorite", async (req, res) => {
     res.send({ article });
 })
 
+// Delete Article
+route.delete("/:article", async (req, res) => {
+
+    var article = await Article.deleteOne({ slug: req.params.article })
+    res.send({ article });
+})
+
 
 module.exports = route
