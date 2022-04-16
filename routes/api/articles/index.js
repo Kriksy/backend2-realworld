@@ -33,6 +33,11 @@ route.get("/", async (req, res) => {
         query.tagList = req.query.tag;
     }
 
+    //GET Articles Favorited by Username
+    if (req.query.favorited) {
+        query.favoritedBy = req.query.favorited
+    }
+
     // https://stackoverflow.com/questions/4299991/how-to-sort-in-mongoose
     var articles = await Article.find(query, null, { sort: { tagList: "descending" } }) // descending, desc: descend stiga ned (motsatsen av alfabetsordning 🤯 )
 
