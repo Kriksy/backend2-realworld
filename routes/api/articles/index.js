@@ -18,9 +18,9 @@ route.get("/", async (req, res) => {
     //GET Articles by Author
     if (req.query.author) {
         // query.author = req.query.author;
-        
-        const user = await User.findOne({username: req.query.author});
-        if(user) {
+
+        const user = await User.findOne({ username: req.query.author });
+        if (user) {
             query.author = user._id;
         }
         else {
@@ -29,14 +29,13 @@ route.get("/", async (req, res) => {
     }
 
     //GET Articles by Tag
-    if(req.query.tag){
+    if (req.query.tag) {
         query.tagList = req.query.tag;
     }
-    
 
     // https://stackoverflow.com/questions/4299991/how-to-sort-in-mongoose
     var articles = await Article.find(query, null, { sort: { tagList: "descending" } }) // descending, desc: descend stiga ned (motsatsen av alfabetsordning 🤯 )
-    
+
     console.log("hey:", query)
     articlesCount = articles.length;
 
@@ -59,13 +58,13 @@ route.get("/:slug", async (req, res) => {
 
 // Get an Author's Articles
 // route.get(`/`, requireLogin, async (req, res) => {
-    
+
 //     console.log("req.query:")
 //     console.log(req.query)
-    
+
 //     console.log("req.body:")
 //     console.log(req.body)
-    
+
 
 //     var article = await Article.findOne({ slug: req.params.slug });
 //     res.send({ article })
@@ -111,18 +110,56 @@ route.put("/:article", async (req, res) => {
 
 
 // FAVORITE ARTICLE
-route.post("/:article/favorite", async (req, res) => {
+route.post("/:article/favorite", async (req, res) => { //:slug
 
-    var article = await Article.findOne({});
+    /* 
+        1. Sätt favorited till true
+        2. Öka favoritesCount med 1
+        3. Lägg till användarens id till lista med personer som har sparat 
+    */
 
+
+    // {{APIURL}}/articles/{{slug}}/favorite
+    await Article.findOneAndUpdate(
+        { slug: req.params.article },
+        {
+            favorited: true,
+        })
+
+    var article = await Article.findOneAndUpdate(
+        { slug: req.params.article },
+        {
+            $inc: { favoritesCount: 1 },
+            $addToSet: { favoritedBy: req.user.username },
+        })
+    console.log("article1", article)
+
+    console.log("2-################", "user", req.user.user_id, "favorited", req.params.article)
     // For testing purposes
     // var articleId = "62514a9182197faaa9d4b03a"; 
     // await Article.findByIdAndUpdate({_id: articleId}, {favorited: true})
     // await Article.findByIdAndUpdate({_id: articleId}, {$inc : {favoritesCount: 1}});
 
-    await Article.findByIdAndUpdate({ _id: article._id }, { favorited: true })
-    await Article.findByIdAndUpdate({ _id: article._id }, { $inc: { favoritesCount: 1 } });
-    article = await Article.findById({ _id: article._id });
+
+
+
+    //await Article.findByIdAndUpdate({ _id: article._id }, { favorited: true })
+    //await Article.findByIdAndUpdate({ _id: article._id }, { $inc: { favoritesCount: 1 } });
+    //article = await Article.findById({ _id: article._id });
+    article = await Article.findOne({ slug: req.params.article });
+    //console.log("article----1", article)
+    article = await Article.findOneAndUpdate({ slug: req.params.article }, {
+        favorited: article.favoritesCount > 0,
+    })
+    //console.log("article----2", article)
+
+    article = await Article.findOne({ slug: req.params.article });
+    //console.log("article----3", article)
+
+    //article.favorited = article.favoritesCount > 0
+
+    console.log("article2", article)
+
 
     res.send({ article });
     // console.log("from FAVORITE ARTICLE POST: article")
@@ -133,16 +170,38 @@ route.post("/:article/favorite", async (req, res) => {
 // UNFAVORITE ARTICLE
 route.delete("/:article/favorite", async (req, res) => {
 
-    var article = await Article.findOne({});
+    var article = await Article.findOneAndUpdate({ slug: req.params.article }, {
+        $inc: { favoritesCount: -1 },
+        $pull: { favoritedBy: req.user.username }, // https://www.mongodb.com/docs/manual/reference/operator/update/pull/
+    });
+
+    console.log("3-################", "user", req.user.user_id, "unfavorited", req.params.article, "article", article._id)
+    console.log("unfav article----0", article)
+
 
     // For testing purposes
     // var articleId = "62514a9182197faaa9d4b03a"; 
     // await Article.findByIdAndUpdate({_id: articleId}, {favorited: false})
     // await Article.findByIdAndUpdate({_id: articleId}, {$inc : {favoritesCount: -1}});
 
-    await Article.findByIdAndUpdate({ _id: article._id }, { favorited: false })
-    await Article.findByIdAndUpdate({ _id: article._id }, { $inc: { favoritesCount: -1 } });
-    article = await Article.findById({ _id: article._id });
+    // await Article.findByIdAndUpdate({ _id: article._id }, { favorited: false })
+    // await Article.findByIdAndUpdate({ _id: article._id }, { $inc: { favoritesCount: -1 } });
+    article = await Article.findOne({ slug: req.params.article });
+    console.log("unfav article----1", article)
+    // Den verkar inte hämta uppdaterade artikeln
+    article = await Article.findOneAndUpdate({ slug: req.params.article }, {
+        favorited: article.favoritesCount > 0,
+    })
+    console.log("unfav article----2", article)
+
+    article = await Article.findOne({ slug: req.params.article });
+    console.log("unfav article----3", article)
+
+    //article.favorited = article.favoritesCount > 0
+
+    console.log("article2", article)
+
+
     res.send({ article });
 })
 
