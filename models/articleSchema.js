@@ -4,6 +4,7 @@ const articleSchema = new mongoose.Schema({
     slug: {
         type: String,
         default: "no slug",
+        unique: true,
     },
     title: {
         type: String,
@@ -26,7 +27,10 @@ const articleSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
     },
-    favorited: {type: Boolean, default: false},
+    favorited: { type: Boolean, default: false },
+    favoritedBy: [{
+        type: String,
+    }]
 
 }, { timestamps: true })
 
