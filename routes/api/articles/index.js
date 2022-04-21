@@ -115,7 +115,7 @@ route.put("/:article", async (req, res) => {
 
 
 // FAVORITE ARTICLE
-route.post("/:article/favorite", async (req, res) => { //:slug
+route.post("/:article/favorite", requireLogin, async (req, res) => { //:slug
 
     /* 
         1. Sätt favorited till true
