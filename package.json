@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "APIURL=http://localhost:3000/api ./api/run-api-tests.sh",
-    "start": "nodemon app.js"
+    "start": "node app.js"
   },
   "keywords": [],
   "author": "",
